@@ -1,10 +1,12 @@
-# KriterinMekan ☕
+# Kriterin Mekan ☕
 
-**Kriterine göre kafe bulma sitesi** — ziyaretçi kendi kriterlerinin (kahve kalitesi, wifi, sessizlik, fiyat vb.) önemini ayarlar, site tüm mekanları bu ağırlıklara göre puanlayıp en uygun olanları %eşleşme skoruyla sıralar.
+**Kriterine göre kafe bulma sitesi** — ziyaretçi kendi kriterlerinin (wifi, dış mekân, paket servis, erişilebilirlik, sigara alanı, yakınlık) önemini ayarlar; site İstanbul'daki **2.932 gerçek kafeyi** bu ağırlıklara göre puanlayıp %eşleşme skoruyla sıralar.
+
+Veriler OpenStreetMap'ten alınmıştır (© OpenStreetMap katkıcıları).
 
 ## Çalıştırma
 
-Derleme adımı yoktur — düz HTML/CSS/JS. Herhangi bir web sunucusuyla açın:
+Derleme adımı yoktur — düz HTML/CSS/JS:
 
 ```bash
 python3 -m http.server 8000
@@ -13,47 +15,50 @@ python3 -m http.server 8000
 
 Veya dosyaları doğrudan hostinge (Greaterine.com, GitHub Pages, Netlify vb.) yükleyin.
 
-## Veritabanını Bağlama
+**Tek dosyalık sürüm** (tüm site + veri tek HTML içinde, `file://` ile bile açılır):
 
-Tüm mekan verisi tek dosyada: **`data/cafes.json`**. Kendi veritabanınızı bağlamak için bu dosyayı aynı formatta güncellemeniz yeterli:
-
-```jsonc
-{
-  "criteria": [
-    { "key": "kahve", "label": "Kahve Kalitesi", "icon": "☕", "desc": "..." }
-    // kriter ekleyip çıkarabilirsiniz — arayüz otomatik uyum sağlar
-  ],
-  "cafes": [
-    {
-      "id": 1,
-      "ad": "Mekan Adı",
-      "semt": "Kadıköy",
-      "fiyat": 2,                    // 1 = ₺, 2 = ₺₺, 3 = ₺₺₺
-      "puanlar": { "kahve": 5, "wifi": 4 /* her kriter için 1–5 */ },
-      "etiketler": ["Nitelikli kahve"],
-      "saat": "08:00 – 23:00",
-      "aciklama": "Kısa açıklama."
-    }
-  ]
-}
+```bash
+python3 scripts/build_single.py dist/kriterinmekan-single.html --full
 ```
 
-- **Kriterler dinamiktir:** `criteria` listesine yeni bir kriter eklerseniz kaydırıcısı otomatik oluşur; mekanların `puanlar` nesnesine aynı `key` ile puan vermeniz yeterli.
-- **Semt filtresi** verideki semtlerden otomatik oluşturulur.
+## Veri Hattı
+
+```
+data/source/export.geojson   (OSM ham verisi, 3.099 nokta)
+        │  python3 scripts/convert.py
+        ▼
+data/cafes.json              (2.932 isimli kafe, normalize edilmiş)
+```
+
+Dönüştürücünün yaptıkları:
+
+- İsimsiz mekanları atlar (167 adet).
+- Semt adlarını normalize eder (`kadıköy` → `Kadıköy`).
+- **Semti eksik ~2.000 mekana**, semti bilinen en yakın 5 mekanın çoğunluk semtini atar (kNN). Bu tahminler `"semtTahmini": true` ile işaretlenir ve arayüzde `*` ile gösterilir.
+- OSM niteliklerini `yes / no / null (bilinmiyor)` üçlüsüne indirger.
+- Mutfak etiketlerini Türkçeleştirir (`coffee_shop` → `Kahve`).
+
+Veriyi güncellemek için: yeni bir OSM dışa aktarımını `data/source/export.geojson` üzerine yazıp `python3 scripts/convert.py` çalıştırmanız yeterli.
 
 ## Puanlama
 
 ```
-Eşleşme % = Σ(kullanıcı ağırlığı × mekan puanı) / Σ(kullanıcı ağırlığı × 5) × 100
+nitelik puanı  : var = 1 · bilinmiyor = 0.35 · yok = 0
+yakınlık puanı : 1 − (uzaklık / 5 km)        (konum izniyle etkinleşir)
+Eşleşme %      = Σ(ağırlık × puan) / Σ(ağırlık) × 100
 ```
 
-Kullanıcı tüm kriterleri "Önemsiz" yaparsa eşit ağırlık varsayılır.
+Bilinmeyen nitelikler cezalandırılmaz ama ödüllendirilmez; kartlarda dürüstçe `?` olarak gösterilir. "Şu an açık" filtresi OSM `opening_hours` gösterimini çözümler (`24/7`, `Mo-Fr 09:00-18:00; Sa 10:00-14:00`, gece taşan aralıklar).
 
 ## Dosya Yapısı
 
 ```
-index.html        → Tek sayfalık arayüz
-css/style.css     → Tasarım (kahve temalı)
-js/app.js         → Puanlama motoru + arayüz mantığı
-data/cafes.json   → Mekan veritabanı (örnek veri)
+index.html                → Tek sayfalık arayüz (Türkçe)
+css/style.css             → Claude organik stili: fildişi zemin, terrakota vurgu,
+                            serif başlıklar; açık + koyu tema
+js/app.js                 → Puanlama motoru, filtreler, "şu an açık" çözümleyici
+data/cafes.json           → İşlenmiş veritabanı
+data/source/export.geojson→ OSM ham verisi
+scripts/convert.py        → GeoJSON → cafes.json dönüştürücü
+scripts/build_single.py   → Tek dosyalık sürüm üretici
 ```

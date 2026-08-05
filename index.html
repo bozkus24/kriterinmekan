@@ -4,109 +4,155 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kriterin Mekan — Kriterine Göre Kafe Bul</title>
-  <meta name="description" content="Sana en uygun kafeyi kriterlerine göre analiz eder: kahve kalitesi, wifi, sessizlik, fiyat ve daha fazlası.">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+  <meta name="description" content="İstanbul'daki 2.900+ kafeyi kendi kriterlerine göre analiz et: wifi, dış mekân, paket servis, erişilebilirlik, yakınlık.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 24 24%22><g stroke=%22%23D97757%22 stroke-width=%222.8%22 stroke-linecap=%22round%22><line x1=%2212%22 y1=%222.5%22 x2=%2212%22 y2=%228%22/><line x1=%2212%22 y1=%2216%22 x2=%2212%22 y2=%2221.5%22/><line x1=%222.5%22 y1=%2212%22 x2=%228%22 y2=%2212%22/><line x1=%2216%22 y1=%2212%22 x2=%2221.5%22 y2=%2212%22/><line x1=%225.4%22 y1=%225.4%22 x2=%229%22 y2=%229%22/><line x1=%2215%22 y1=%2215%22 x2=%2218.6%22 y2=%2218.6%22/><line x1=%2218.6%22 y1=%225.4%22 x2=%2215%22 y2=%229%22/><line x1=%229%22 y1=%2215%22 x2=%225.4%22 y2=%2218.6%22/></g></svg>">
   <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
 
+  <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+    <defs>
+      <symbol id="spark" viewBox="0 0 24 24">
+        <g stroke="currentColor" stroke-width="2.6" stroke-linecap="round" fill="none">
+          <line x1="12" y1="2.5"  x2="12"   y2="8"/>
+          <line x1="12" y1="16"   x2="12"   y2="21.5"/>
+          <line x1="2.5" y1="12"  x2="8"    y2="12"/>
+          <line x1="16" y1="12"   x2="21.5" y2="12"/>
+          <line x1="5.6" y1="5.6" x2="9.2"  y2="9.2"/>
+          <line x1="14.8" y1="14.8" x2="18.4" y2="18.4"/>
+          <line x1="18.4" y1="5.6" x2="14.8" y2="9.2"/>
+          <line x1="9.2" y1="14.8" x2="5.6"  y2="18.4"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
   <header class="site-header">
     <div class="container header-inner">
       <a class="logo" href="#">
-        <span class="logo-mark">☕</span>
-        <span class="logo-text">Kriterin<em>Mekan</em></span>
+        <svg class="spark" aria-hidden="true"><use href="#spark"/></svg>
+        <span class="logo-text">Kriterin Mekan</span>
       </a>
       <nav class="header-nav">
-        <a href="#nasil">Nasıl Çalışır?</a>
-        <a href="#analiz" class="btn btn-small">Analize Başla</a>
+        <a href="#nasil">Nasıl çalışır?</a>
+        <a href="#analiz" class="btn btn-small">Analize başla</a>
       </nav>
     </div>
   </header>
 
   <section class="hero">
+    <div class="hero-blob b1" aria-hidden="true"></div>
+    <div class="hero-blob b2" aria-hidden="true"></div>
     <div class="container hero-inner">
-      <h1>Hangi kafeye gitsem?<br><span class="accent">Kriterlerin karar versin.</span></h1>
+      <svg class="spark-lg" aria-hidden="true"><use href="#spark"/></svg>
+      <p class="eyebrow">İstanbul kafe rehberi</p>
+      <h1>Hangi kafeye gitsem?<br><em>Kriterlerin</em> karar versin.</h1>
       <p class="hero-sub">
-        Senin için neyin önemli olduğunu söyle — kahve kalitesi, sessizlik, wifi, fiyat…
-        Biz de mekanları <strong>senin kriterlerine göre</strong> puanlayıp en uygun olanları sıralayalım.
+        Wifi, dış mekân, paket servis, erişilebilirlik, yakınlık… Senin için neyin önemli
+        olduğunu söyle; İstanbul'un kafelerini senin ağırlıklarına göre puanlayıp sıralayalım.
       </p>
-      <a href="#analiz" class="btn btn-primary btn-large">☕ Analize Başla</a>
+      <div class="hero-actions">
+        <a href="#analiz" class="btn btn-accent btn-large">Analize başla</a>
+        <a href="#nasil" class="btn btn-ghost btn-large">Nasıl çalışır?</a>
+      </div>
       <div class="hero-stats" id="heroStats"></div>
     </div>
   </section>
 
   <section class="how" id="nasil">
     <div class="container">
-      <h2 class="section-title">Nasıl Çalışır?</h2>
+      <div class="section-head">
+        <p class="eyebrow">Üç adım</p>
+        <h2>Nasıl çalışır?</h2>
+      </div>
       <div class="how-grid">
         <div class="how-card">
-          <div class="how-num">1</div>
-          <h3>Kriterlerini Ayarla</h3>
-          <p>Her kriter için "senin için ne kadar önemli?" kaydırıcısını ayarla.</p>
+          <svg class="spark" aria-hidden="true"><use href="#spark"/></svg>
+          <h3>Kriterlerini ayarla</h3>
+          <p>Her kriter için "senin için ne kadar önemli?" kaydırıcısını ayarla; istersen konumunu paylaşıp yakınlığı da hesaba kat.</p>
         </div>
         <div class="how-card">
-          <div class="how-num">2</div>
+          <svg class="spark" aria-hidden="true"><use href="#spark"/></svg>
           <h3>Filtrele</h3>
-          <p>İstersen semt ve bütçe filtresi ekle, aramanı daralt.</p>
+          <p>Semt, tür ve isimle arama yap; yalnızca şu an açık olanları göster.</p>
         </div>
         <div class="how-card">
-          <div class="how-num">3</div>
-          <h3>Eşleşmeni Gör</h3>
-          <p>Her mekan senin ağırlıklarına göre puanlanır ve %eşleşme ile sıralanır.</p>
+          <svg class="spark" aria-hidden="true"><use href="#spark"/></svg>
+          <h3>Eşleşmeni gör</h3>
+          <p>Her mekan senin ağırlıklarına göre puanlanır. Veriler gerçek kayıtlardan gelir; bilinmeyen nitelikler dürüstçe "?" olarak gösterilir.</p>
         </div>
       </div>
     </div>
   </section>
 
   <main class="analyzer" id="analiz">
-    <div class="container analyzer-grid">
+    <div class="container">
+      <div class="section-head">
+        <p class="eyebrow">Analiz</p>
+        <h2>Sana en uygun kafeler</h2>
+      </div>
+      <div class="analyzer-grid">
 
-      <aside class="panel criteria-panel">
-        <div class="panel-header">
-          <h2>Kriterlerin</h2>
-          <button type="button" class="link-btn" id="resetBtn">Sıfırla</button>
-        </div>
-        <p class="panel-hint">Her kriterin senin için önemini ayarla:</p>
-        <div id="criteriaSliders"></div>
-
-        <div class="panel-header filters-header">
-          <h2>Filtreler</h2>
-        </div>
-        <div class="filter-group">
-          <label for="semtSelect">Semt</label>
-          <select id="semtSelect">
-            <option value="">Tüm semtler</option>
-          </select>
-        </div>
-        <div class="filter-group">
-          <label>Bütçe</label>
-          <div class="budget-btns" id="budgetBtns">
-            <button type="button" data-fiyat="" class="active">Hepsi</button>
-            <button type="button" data-fiyat="1">₺</button>
-            <button type="button" data-fiyat="2">₺₺</button>
-            <button type="button" data-fiyat="3">₺₺₺</button>
+        <aside class="panel">
+          <div class="panel-header">
+            <h2>Kriterlerin</h2>
+            <button type="button" class="link-btn" id="resetBtn">Sıfırla</button>
           </div>
-        </div>
-      </aside>
+          <p class="panel-hint">Her kriterin senin için önemini ayarla:</p>
+          <div id="criteriaSliders"></div>
 
-      <section class="results">
-        <div class="results-header">
-          <h2>Sana En Uygun Mekanlar</h2>
-          <span class="results-count" id="resultsCount"></span>
-        </div>
-        <div class="results-grid" id="resultsGrid"></div>
-        <p class="no-results" id="noResults" hidden>
-          Bu filtrelerle eşleşen mekan bulunamadı. Filtreleri gevşetmeyi dene. ☕
-        </p>
-      </section>
+          <button type="button" class="btn btn-ghost btn-small location-btn" id="locBtn">
+            📍 Konumumu kullan — yakınlığı hesapla
+          </button>
+          <p class="location-status" id="locStatus" hidden></p>
 
+          <div class="panel-header filters-header">
+            <h2>Filtreler</h2>
+          </div>
+
+          <div class="filter-group">
+            <label for="searchInput">İsimle ara</label>
+            <input type="search" id="searchInput" placeholder="ör. Moda, kitap, fırın…" autocomplete="off">
+          </div>
+
+          <div class="filter-group">
+            <label for="semtSelect">Semt</label>
+            <select id="semtSelect"><option value="">Tüm semtler</option></select>
+          </div>
+
+          <div class="filter-group">
+            <label for="turSelect">Tür</label>
+            <select id="turSelect"><option value="">Tüm türler</option></select>
+          </div>
+
+          <label class="check-row" for="openNow">
+            <input type="checkbox" id="openNow">
+            <span>Şu an açık olanlar <span class="note">(saat bilgisi olanlar)</span></span>
+          </label>
+        </aside>
+
+        <section class="results">
+          <div class="results-header">
+            <h2 id="resultsTitle">Eşleşmeler</h2>
+            <span class="results-count" id="resultsCount"></span>
+          </div>
+          <div class="results-grid" id="resultsGrid"></div>
+          <p class="no-results" id="noResults" hidden>
+            Bu filtrelerle eşleşen kafe bulunamadı — filtreleri gevşetmeyi dene.
+          </p>
+          <div class="load-more-wrap">
+            <button type="button" class="btn btn-ghost" id="loadMoreBtn" hidden>Daha fazla göster</button>
+          </div>
+        </section>
+
+      </div>
     </div>
   </main>
 
   <footer class="site-footer">
     <div class="container footer-inner">
-      <p>© 2026 KriterinMekan · Greaterine.com projesidir</p>
-      <p class="footer-note">Mekan verileri örnektir; gerçek veritabanı bağlandığında otomatik güncellenir.</p>
+      <p><svg class="spark" aria-hidden="true"><use href="#spark"/></svg> © 2026 Kriterin Mekan · Greaterine.com projesidir</p>
+      <p>Mekan verileri OpenStreetMap katkıcılarından (© OSM) alınmıştır.</p>
     </div>
   </footer>
 
