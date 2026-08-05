@@ -1,0 +1,134 @@
+{
+  "criteria": [
+    { "key": "kahve",     "label": "Kahve Kalitesi",   "icon": "☕", "desc": "Çekirdek kalitesi ve demleme ustalığı" },
+    { "key": "wifi",      "label": "Wi-Fi Hızı",        "icon": "📶", "desc": "İnternet hızı ve stabilitesi" },
+    { "key": "sessizlik", "label": "Sessizlik",         "icon": "🤫", "desc": "Çalışmaya / okumaya uygun ortam" },
+    { "key": "priz",      "label": "Priz İmkânı",       "icon": "🔌", "desc": "Masalarda priz bulunabilirliği" },
+    { "key": "atmosfer",  "label": "Atmosfer",          "icon": "✨", "desc": "Dekor, müzik ve genel ambiyans" },
+    { "key": "servis",    "label": "Servis Hızı",       "icon": "🏃", "desc": "Sipariş ve servis hızı, ilgi" },
+    { "key": "tatli",     "label": "Tatlı & Atıştırma", "icon": "🍰", "desc": "Tatlı ve yiyecek çeşitliliği" },
+    { "key": "disMekan",  "label": "Dış Mekân",         "icon": "🌿", "desc": "Bahçe / teras oturma alanı" }
+  ],
+  "cafes": [
+    {
+      "id": 1,
+      "ad": "Demlik Coffee Roastery",
+      "semt": "Kadıköy",
+      "fiyat": 2,
+      "puanlar": { "kahve": 5, "wifi": 4, "sessizlik": 3, "priz": 4, "atmosfer": 4, "servis": 4, "tatli": 3, "disMekan": 2 },
+      "etiketler": ["Nitelikli kahve", "Kendi kavurumu", "Filtre çeşitleri"],
+      "saat": "08:00 – 23:00",
+      "aciklama": "Kendi çekirdeğini kavuran, üçüncü dalga kahvenin semtteki öncülerinden."
+    },
+    {
+      "id": 2,
+      "ad": "Sayfa Kitap & Kahve",
+      "semt": "Kadıköy",
+      "fiyat": 1,
+      "puanlar": { "kahve": 3, "wifi": 5, "sessizlik": 5, "priz": 5, "atmosfer": 4, "servis": 3, "tatli": 2, "disMekan": 1 },
+      "etiketler": ["Ders çalışmaya uygun", "Kitaplık", "Sessiz kat"],
+      "saat": "09:00 – 22:00",
+      "aciklama": "Kitap kokulu, sessiz bir çalışma sığınağı. Her masada priz, üst katta konuşmak yasak."
+    },
+    {
+      "id": 3,
+      "ad": "Fincan Bahçe",
+      "semt": "Moda",
+      "fiyat": 2,
+      "puanlar": { "kahve": 4, "wifi": 3, "sessizlik": 3, "priz": 2, "atmosfer": 5, "servis": 4, "tatli": 4, "disMekan": 5 },
+      "etiketler": ["Bahçeli", "Evcil hayvan dostu", "Kahvaltı"],
+      "saat": "08:30 – 22:00",
+      "aciklama": "Yeşillikler içinde geniş bir bahçe, hafta sonu kahvaltısıyla ünlü."
+    },
+    {
+      "id": 4,
+      "ad": "Nokta Espresso Bar",
+      "semt": "Beşiktaş",
+      "fiyat": 2,
+      "puanlar": { "kahve": 5, "wifi": 3, "sessizlik": 2, "priz": 2, "atmosfer": 4, "servis": 5, "tatli": 3, "disMekan": 2 },
+      "etiketler": ["Espresso odaklı", "Hızlı servis", "Ayakta içim"],
+      "saat": "07:30 – 21:00",
+      "aciklama": "Sabah koşuşturmasında en hızlı ve en iyi espresso. Küçük ama iddialı."
+    },
+    {
+      "id": 5,
+      "ad": "Tereyağı Fırın & Kahve",
+      "semt": "Beşiktaş",
+      "fiyat": 3,
+      "puanlar": { "kahve": 4, "wifi": 3, "sessizlik": 3, "priz": 2, "atmosfer": 4, "servis": 4, "tatli": 5, "disMekan": 3 },
+      "etiketler": ["Taze fırın", "Kruvasan", "Brunch"],
+      "saat": "08:00 – 20:00",
+      "aciklama": "Gün boyu taze çıkan kruvasan ve ekşi mayalı ekmekleriyle fırın-kafe."
+    },
+    {
+      "id": 6,
+      "ad": "Kampüs Kahve",
+      "semt": "Şişli",
+      "fiyat": 1,
+      "puanlar": { "kahve": 3, "wifi": 5, "sessizlik": 4, "priz": 5, "atmosfer": 3, "servis": 3, "tatli": 2, "disMekan": 1 },
+      "etiketler": ["Öğrenci dostu", "Uygun fiyat", "24 saate yakın"],
+      "saat": "07:00 – 02:00",
+      "aciklama": "Sınav haftalarının kurtarıcısı: ucuz, geç saate kadar açık, her köşede priz."
+    },
+    {
+      "id": 7,
+      "ad": "Loş Atölye",
+      "semt": "Karaköy",
+      "fiyat": 3,
+      "puanlar": { "kahve": 4, "wifi": 4, "sessizlik": 4, "priz": 3, "atmosfer": 5, "servis": 4, "tatli": 4, "disMekan": 2 },
+      "etiketler": ["Tasarım dekor", "Sanat galerisi", "Vinil müzik"],
+      "saat": "10:00 – 23:00",
+      "aciklama": "Galeri-kafe karışımı; loş ışık, vinil plaklar ve özenli sunum."
+    },
+    {
+      "id": 8,
+      "ad": "Rıhtım Kahvesi",
+      "semt": "Karaköy",
+      "fiyat": 2,
+      "puanlar": { "kahve": 4, "wifi": 2, "sessizlik": 2, "priz": 1, "atmosfer": 5, "servis": 3, "tatli": 3, "disMekan": 5 },
+      "etiketler": ["Deniz manzarası", "Gün batımı", "Teras"],
+      "saat": "09:00 – 00:00",
+      "aciklama": "Boğaz manzaralı terasıyla gün batımı kahvesinin adresi."
+    },
+    {
+      "id": 9,
+      "ad": "Közde Türk Kahvesi",
+      "semt": "Üsküdar",
+      "fiyat": 1,
+      "puanlar": { "kahve": 5, "wifi": 2, "sessizlik": 3, "priz": 1, "atmosfer": 4, "servis": 4, "tatli": 4, "disMekan": 4 },
+      "etiketler": ["Türk kahvesi", "Közde pişirme", "Lokum ikramı"],
+      "saat": "10:00 – 23:00",
+      "aciklama": "Geleneksel közde Türk kahvesi, yanında ev yapımı lokum."
+    },
+    {
+      "id": 10,
+      "ad": "Bulut Çalışma Evi",
+      "semt": "Levent",
+      "fiyat": 3,
+      "puanlar": { "kahve": 3, "wifi": 5, "sessizlik": 5, "priz": 5, "atmosfer": 3, "servis": 3, "tatli": 2, "disMekan": 1 },
+      "etiketler": ["Co-working", "Toplantı odası", "Sınırsız filtre"],
+      "saat": "08:00 – 22:00",
+      "aciklama": "Giriş ücretine sınırsız filtre kahve dahil; tam bir uzaktan çalışma üssü."
+    },
+    {
+      "id": 11,
+      "ad": "Mahalle Fincanı",
+      "semt": "Üsküdar",
+      "fiyat": 1,
+      "puanlar": { "kahve": 3, "wifi": 3, "sessizlik": 3, "priz": 3, "atmosfer": 4, "servis": 5, "tatli": 3, "disMekan": 3 },
+      "etiketler": ["Samimi", "Uygun fiyat", "Ev yapımı kek"],
+      "saat": "08:00 – 21:00",
+      "aciklama": "Adı üstünde mahalle kafesi: herkes birbirini tanır, kekler ev yapımı."
+    },
+    {
+      "id": 12,
+      "ad": "Verandah Specialty",
+      "semt": "Moda",
+      "fiyat": 3,
+      "puanlar": { "kahve": 5, "wifi": 4, "sessizlik": 3, "priz": 3, "atmosfer": 5, "servis": 4, "tatli": 4, "disMekan": 4 },
+      "etiketler": ["Nitelikli kahve", "Deniz esintisi", "Cold brew"],
+      "saat": "09:00 – 23:00",
+      "aciklama": "Moda sahiline yürüme mesafesinde, ödüllü baristalarıyla specialty kahve."
+    }
+  ]
+}

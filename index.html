@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kriterin Mekan — Kriterine Göre Kafe Bul</title>
+  <meta name="description" content="Sana en uygun kafeyi kriterlerine göre analiz eder: kahve kalitesi, wifi, sessizlik, fiyat ve daha fazlası.">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>☕</text></svg>">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <a class="logo" href="#">
+        <span class="logo-mark">☕</span>
+        <span class="logo-text">Kriterin<em>Mekan</em></span>
+      </a>
+      <nav class="header-nav">
+        <a href="#nasil">Nasıl Çalışır?</a>
+        <a href="#analiz" class="btn btn-small">Analize Başla</a>
+      </nav>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="container hero-inner">
+      <h1>Hangi kafeye gitsem?<br><span class="accent">Kriterlerin karar versin.</span></h1>
+      <p class="hero-sub">
+        Senin için neyin önemli olduğunu söyle — kahve kalitesi, sessizlik, wifi, fiyat…
+        Biz de mekanları <strong>senin kriterlerine göre</strong> puanlayıp en uygun olanları sıralayalım.
+      </p>
+      <a href="#analiz" class="btn btn-primary btn-large">☕ Analize Başla</a>
+      <div class="hero-stats" id="heroStats"></div>
+    </div>
+  </section>
+
+  <section class="how" id="nasil">
+    <div class="container">
+      <h2 class="section-title">Nasıl Çalışır?</h2>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-num">1</div>
+          <h3>Kriterlerini Ayarla</h3>
+          <p>Her kriter için "senin için ne kadar önemli?" kaydırıcısını ayarla.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">2</div>
+          <h3>Filtrele</h3>
+          <p>İstersen semt ve bütçe filtresi ekle, aramanı daralt.</p>
+        </div>
+        <div class="how-card">
+          <div class="how-num">3</div>
+          <h3>Eşleşmeni Gör</h3>
+          <p>Her mekan senin ağırlıklarına göre puanlanır ve %eşleşme ile sıralanır.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <main class="analyzer" id="analiz">
+    <div class="container analyzer-grid">
+
+      <aside class="panel criteria-panel">
+        <div class="panel-header">
+          <h2>Kriterlerin</h2>
+          <button type="button" class="link-btn" id="resetBtn">Sıfırla</button>
+        </div>
+        <p class="panel-hint">Her kriterin senin için önemini ayarla:</p>
+        <div id="criteriaSliders"></div>
+
+        <div class="panel-header filters-header">
+          <h2>Filtreler</h2>
+        </div>
+        <div class="filter-group">
+          <label for="semtSelect">Semt</label>
+          <select id="semtSelect">
+            <option value="">Tüm semtler</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <label>Bütçe</label>
+          <div class="budget-btns" id="budgetBtns">
+            <button type="button" data-fiyat="" class="active">Hepsi</button>
+            <button type="button" data-fiyat="1">₺</button>
+            <button type="button" data-fiyat="2">₺₺</button>
+            <button type="button" data-fiyat="3">₺₺₺</button>
+          </div>
+        </div>
+      </aside>
+
+      <section class="results">
+        <div class="results-header">
+          <h2>Sana En Uygun Mekanlar</h2>
+          <span class="results-count" id="resultsCount"></span>
+        </div>
+        <div class="results-grid" id="resultsGrid"></div>
+        <p class="no-results" id="noResults" hidden>
+          Bu filtrelerle eşleşen mekan bulunamadı. Filtreleri gevşetmeyi dene. ☕
+        </p>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>© 2026 KriterinMekan · Greaterine.com projesidir</p>
+      <p class="footer-note">Mekan verileri örnektir; gerçek veritabanı bağlandığında otomatik güncellenir.</p>
+    </div>
+  </footer>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
