@@ -306,6 +306,19 @@ body {
 
 .panel-hint { color: var(--ink-soft); font-size: 0.85rem; margin-bottom: 1.1rem; }
 
+.crit-group-title {
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--ink-soft);
+  margin: 1.15rem 0 0.7rem;
+  padding-top: 0.9rem;
+  border-top: 1px dashed var(--line);
+}
+
+.crit-group-title:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+
 .criterion { margin-bottom: 1.05rem; }
 
 .criterion-top {
@@ -547,6 +560,79 @@ body {
 .cafe-links a:hover { text-decoration: underline; text-underline-offset: 2px; }
 
 .dist-note { color: var(--ink-soft); font-variant-numeric: tabular-nums; }
+
+/* ---------- Puanlama ---------- */
+.rating-inline { color: var(--accent-deep); font-weight: 600; font-variant-numeric: tabular-nums; }
+.rating-inline small { font-weight: 400; color: var(--ink-soft); }
+
+.rate-btn {
+  background: none;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 0.14rem 0.6rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.rate-btn:hover { border-color: var(--accent); color: var(--accent-deep); }
+.rate-btn.voted { border-color: var(--accent); color: var(--accent-deep); background: var(--accent-wash); }
+
+.rate-box {
+  border-top: 1px dashed var(--line-strong);
+  padding-top: 0.8rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+}
+
+.rate-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.6rem;
+}
+
+.rate-label { font-size: 0.85rem; font-weight: 500; }
+
+.stars { display: flex; gap: 0.1rem; }
+
+.star-btn {
+  background: none;
+  border: none;
+  font-size: 1.35rem;
+  line-height: 1;
+  color: var(--line-strong);
+  cursor: pointer;
+  padding: 0.05rem;
+  transition: color 0.12s, transform 0.12s;
+}
+
+.star-btn:hover { transform: scale(1.15); }
+.star-btn.on { color: var(--accent); }
+
+.pill-pair { display: flex; gap: 0.3rem; }
+
+.pill {
+  background: none;
+  border: 1px solid var(--line-strong);
+  border-radius: 999px;
+  padding: 0.18rem 0.7rem;
+  font-family: var(--sans);
+  font-size: 0.78rem;
+  font-weight: 600;
+  color: var(--ink-soft);
+  cursor: pointer;
+}
+
+.pill:hover { border-color: var(--accent); color: var(--accent-deep); }
+.pill.on { background: var(--good-wash); border-color: var(--good); color: var(--good); }
+.pill.on.no { background: transparent; border-color: var(--bad); color: var(--bad); }
+
+.rate-actions { display: flex; align-items: center; gap: 0.6rem; margin-top: 0.2rem; }
+.rate-note { font-size: 0.74rem; color: var(--ink-soft); }
 
 .load-more-wrap { text-align: center; margin-top: 2rem; }
 

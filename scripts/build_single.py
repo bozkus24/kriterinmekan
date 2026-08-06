@@ -23,18 +23,20 @@ def build(full: bool) -> str:
     js = (ROOT / "js" / "app.js").read_text(encoding="utf-8")
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     data = json.loads((ROOT / "data" / "cafes.json").read_text(encoding="utf-8"))
+    puanlar = json.loads((ROOT / "data" / "puanlar.json").read_text(encoding="utf-8"))
 
     body = html.split("<body>", 1)[1].rsplit("</body>", 1)[0]
     body = body.replace('<script src="js/app.js"></script>', "").strip()
 
     # "</script>" dizisinin script bloğunu erken kapatmaması için kaçır
     data_js = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
+    puan_js = json.dumps(puanlar, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
     core = (
         "<title>Kriterin Mekan — Kriterine Göre Kafe Bul</title>\n"
         f"<style>\n{css}\n</style>\n"
         f"{body}\n"
-        f"<script>window.__CAFE_DATA__ = {data_js};</script>\n"
+        f"<script>window.__CAFE_DATA__ = {data_js};\nwindow.__PUAN_DATA__ = {puan_js};</script>\n"
         f"<script>\n{js}\n</script>\n"
     )
 

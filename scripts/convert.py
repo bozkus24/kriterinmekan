@@ -70,21 +70,44 @@ def norm_yes_no(v):
     return None
 
 
+# İstanbul'un resmî 39 ilçesi — her yazım varyantı bunlara eşlenir
+DISTRICTS = [
+    "Adalar", "Arnavutköy", "Ataşehir", "Avcılar", "Bağcılar", "Bahçelievler",
+    "Bakırköy", "Başakşehir", "Bayrampaşa", "Beşiktaş", "Beykoz", "Beylikdüzü",
+    "Beyoğlu", "Büyükçekmece", "Çatalca", "Çekmeköy", "Esenler", "Esenyurt",
+    "Eyüpsultan", "Fatih", "Gaziosmanpaşa", "Güngören", "Kadıköy", "Kağıthane",
+    "Kartal", "Küçükçekmece", "Maltepe", "Pendik", "Sancaktepe", "Sarıyer",
+    "Silivri", "Sultanbeyli", "Sultangazi", "Şile", "Şişli", "Tuzla",
+    "Ümraniye", "Üsküdar", "Zeytinburnu",
+]
+
+_FOLD = str.maketrans("ıöüşçğâî", "iouscgai")
+
+
+def _fold(s):
+    """Türkçe karakterleri sadeleştirip küçük harfe indirger: 'KADIKÖY' → 'kadikoy'"""
+    return s.strip().lower().replace("i̇", "i").translate(_FOLD)
+
+
+_DISTRICT_BY_FOLD = {_fold(d): d for d in DISTRICTS}
+# İlçe sanılan semt/eski adlar → gerçek ilçe
+_DISTRICT_BY_FOLD.update({
+    "eyup": "Eyüpsultan",
+    "karakoy": "Beyoğlu",
+    "sefakoy": "Küçükçekmece",
+    "yakacik": "Kartal",
+})
+
+
 def norm_district(v):
-    if not v:
+    if not v or not v.strip():
         return None
-    v = v.strip()
-    if not v:
-        return None
-    # "kadıköy" → "Kadıköy" (Türkçe harf duyarlı)
-    lowered = v.lower().replace("i̇", "i")
-    fixed = lowered[0].upper() + lowered[1:] if lowered else v
-    # Türkçe büyük İ düzeltmesi: "istanbul" gibi i ile başlayanlar
-    if v[0] in ("i", "ı") and v.lower().startswith("i"):
-        fixed = "İ" + lowered[1:]
-    # Bilinen yazım düzeltmeleri
-    fixes = {"Eyüp": "Eyüpsultan"}
-    return fixes.get(fixed, fixed)
+    folded = _fold(v)
+    if folded in _DISTRICT_BY_FOLD:
+        return _DISTRICT_BY_FOLD[folded]
+    # Listede yoksa olduğu gibi (baş harfi büyük) bırak ve uyar
+    print(f"  ! eşleşmeyen ilçe adı: {v!r}")
+    return v.strip()
 
 
 def clean_phone(v):

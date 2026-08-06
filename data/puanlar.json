@@ -1,0 +1,8 @@
+{
+  "meta": {
+    "aciklama": "Topluluk/kurul puanları. Ziyaretçi oyları tarayıcıda saklanır; buradaki 'oylar' sözlüğü site sahibinin doğruladığı kalıcı oyları tutar ve herkese gösterilir.",
+    "sema": "mekanId → oy listesi. Alanlar: genel (1-5), priz/sessiz/calisma ('yes'|'no')",
+    "ornek": { "node/123456": [{ "genel": 4, "priz": "yes", "sessiz": "no", "calisma": "yes" }] }
+  },
+  "oylar": {}
+}

@@ -33,7 +33,9 @@ data/cafes.json              (2.932 isimli kafe, normalize edilmiş)
 Dönüştürücünün yaptıkları:
 
 - İsimsiz mekanları atlar (167 adet).
-- Semt adlarını normalize eder (`kadıköy` → `Kadıköy`).
+- İlçe adlarını resmî 39 ilçe listesine eşler: her yazım varyantı tek kayıtta
+  birleşir (`kadıköy`, `Kadikoy`, `KADIKÖY` → `Kadıköy`; `Bakirköy` → `Bakırköy`;
+  `Eyüp` → `Eyüpsultan`), ilçe sanılan semtler düzeltilir (`Karaköy` → `Beyoğlu`).
 - **Semti eksik ~2.000 mekana**, semti bilinen en yakın 5 mekanın çoğunluk semtini atar (kNN). Bu tahminler `"semtTahmini": true` ile işaretlenir ve arayüzde `*` ile gösterilir.
 - OSM niteliklerini `yes / no / null (bilinmiyor)` üçlüsüne indirger.
 - Mutfak etiketlerini Türkçeleştirir (`coffee_shop` → `Kahve`).
@@ -45,10 +47,24 @@ Veriyi güncellemek için: yeni bir OSM dışa aktarımını `data/source/export
 ```
 nitelik puanı  : var = 1 · bilinmiyor = 0.35 · yok = 0
 yakınlık puanı : 1 − (uzaklık / 5 km)        (konum izniyle etkinleşir)
+genel puan     : (yıldız ortalaması − 1) / 4
 Eşleşme %      = Σ(ağırlık × puan) / Σ(ağırlık) × 100
 ```
 
 Bilinmeyen nitelikler cezalandırılmaz ama ödüllendirilmez; kartlarda dürüstçe `?` olarak gösterilir. "Şu an açık" filtresi OSM `opening_hours` gösterimini çözümler (`24/7`, `Mo-Fr 09:00-18:00; Sa 10:00-14:00`, gece taşan aralıklar).
+
+## Topluluk Puanları
+
+Kriterler iki gruptur: **Kayıtlı veriler** (OSM'den gelen wifi, dış mekân vb.)
+ve **Topluluk puanları** (genel yıldız + priz + sessizlik + çalışma ortamı).
+Ziyaretçi her kartta "☆ Puanla" ile oy verir:
+
+- Oy, ziyaretçinin tarayıcısında (`localStorage`) saklanır ve kendi
+  sıralamasına anında yansır.
+- `data/puanlar.json` sahibin doğruladığı **kalıcı** oyları tutar; buraya
+  eklenen oylar herkese gösterilir ve ortalamaya katılır. (Ortak oy havuzu
+  için ileride küçük bir backend — ör. Supabase — bağlanabilir; motor buna
+  hazırdır.)
 
 ## Dosya Yapısı
 
