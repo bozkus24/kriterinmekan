@@ -1,5 +1,5 @@
 __pycache__/
 *.pyc
 
-# Üretilen Excel çıktısı (kaynak: data/cafes.json)
-kriterinmekan-veritabani.xlsx
+# Üretilen Excel çıktıları (kaynak: data/cafes.json)
+*.xlsx
