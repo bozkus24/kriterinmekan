@@ -44,6 +44,13 @@ Veriyi güncellemek için: yeni bir OSM dışa aktarımını `data/source/export
 
 ## Puanlama
 
+Her kriter üç düzeyden birine ayarlanır:
+
+- **Fark etmez** — hesaba katılmaz.
+- **Önemli** — eşleşme yüzdesine ağırlığıyla katılır.
+- **Olmazsa olmaz** — filtre gibi çalışır: özelliği "var" olmayan mekanlar
+  listeden çıkarılır (yakınlıkta ≤ 2 km, genel puanda ★4 ve üzeri demektir).
+
 ```
 nitelik puanı  : var = 1 · bilinmiyor = 0.35 · yok = 0
 yakınlık puanı : 1 − (uzaklık / 5 km)        (konum izniyle etkinleşir)

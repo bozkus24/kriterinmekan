@@ -4,10 +4,14 @@
    Yakınlık puanı: 1 − (uzaklık / 5 km), konum izniyle etkinleşir
    ============================================================ */
 
-const WEIGHT_LABELS = ["Önemsiz", "Az önemli", "Orta", "Önemli", "Çok önemli"];
-const DEFAULT_WEIGHT = 2;
+// Önem düzeyleri: 0 = Fark etmez · 1 = Önemli · 2 = Olmazsa olmaz (filtre gibi çalışır)
+const LEVELS = ["Fark etmez", "Önemli", "Olmazsa olmaz"];
+const MUST = 2;
+const DEFAULT_LEVEL = 1;
 const UNKNOWN_SCORE = 0.35;
-const MAX_DIST_KM = 5;
+const MAX_DIST_KM = 5;      // yakınlık puanının sıfırlandığı uzaklık
+const MUST_DIST_KM = 2;     // "olmazsa olmaz" yakınlık eşiği
+const MUST_STARS = 4;       // "olmazsa olmaz" genel puan eşiği
 const PAGE_SIZE = 24;
 
 const CRITERIA = [
@@ -175,8 +179,8 @@ async function loadData() {
 
 /* ---------- Başlatma ---------- */
 function init() {
-  CRITERIA.forEach(c => { weights[c.key] = c.needsLocation ? 0 : DEFAULT_WEIGHT; });
-  renderSliders();
+  CRITERIA.forEach(c => { weights[c.key] = c.needsLocation ? 0 : DEFAULT_LEVEL; });
+  renderCriteria();
   renderSelects();
   renderHeroStats();
   bindEvents();
@@ -185,7 +189,7 @@ function init() {
   loadCloudVotes();   // yapılandırılmışsa ortak havuzu arka planda getir
 }
 
-function renderSliders() {
+function renderCriteria() {
   let lastGroup = null;
   $("criteriaSliders").innerHTML = CRITERIA.map(c => {
     const locked = c.needsLocation && !userLoc;
@@ -193,14 +197,14 @@ function renderSliders() {
       ? `<p class="crit-group-title">${esc(GROUP_TITLES[c.group] || "")}</p>`
       : "";
     lastGroup = c.group;
+    const buttons = LEVELS.map((lbl, lv) => `
+      <button type="button" role="radio" aria-checked="${weights[c.key] === lv}"
+        class="seg-btn ${weights[c.key] === lv ? "on" : ""} ${lv === MUST ? "must" : ""}"
+        data-key="${c.key}" data-level="${lv}" ${locked ? "disabled" : ""}>${lbl}</button>`).join("");
     return header + `
     <div class="criterion ${locked ? "locked" : ""}" id="crit-${c.key}">
-      <div class="criterion-top">
-        <span class="criterion-label" title="${esc(c.desc)}">${esc(c.label)}</span>
-        <span class="criterion-value" id="val-${c.key}">${WEIGHT_LABELS[weights[c.key]]}</span>
-      </div>
-      <input type="range" min="0" max="4" step="1" value="${weights[c.key]}"
-             data-key="${c.key}" aria-label="${esc(c.label)} önemi" ${locked ? "disabled" : ""}>
+      <span class="criterion-label" title="${esc(c.desc)}">${esc(c.label)}</span>
+      <div class="seg" role="radiogroup" aria-label="${esc(c.label)} önemi">${buttons}</div>
       ${locked ? `<p class="locked-note">Konum izni verince etkinleşir.</p>` : ""}
     </div>`;
   }).join("");
@@ -246,11 +250,11 @@ function renderHeroStats() {
 
 /* ---------- Olaylar ---------- */
 function bindEvents() {
-  $("criteriaSliders").addEventListener("input", e => {
-    if (e.target.type !== "range") return;
-    const key = e.target.dataset.key;
-    weights[key] = Number(e.target.value);
-    $(`val-${key}`).textContent = WEIGHT_LABELS[weights[key]];
+  $("criteriaSliders").addEventListener("click", e => {
+    const btn = e.target.closest(".seg-btn");
+    if (!btn || btn.disabled) return;
+    weights[btn.dataset.key] = Number(btn.dataset.level);
+    renderCriteria();
     resetPageAndUpdate();
   });
 
@@ -268,8 +272,8 @@ function bindEvents() {
   });
 
   $("resetBtn").addEventListener("click", () => {
-    CRITERIA.forEach(c => { weights[c.key] = c.needsLocation && !userLoc ? 0 : DEFAULT_WEIGHT; });
-    renderSliders();
+    CRITERIA.forEach(c => { weights[c.key] = c.needsLocation && !userLoc ? 0 : DEFAULT_LEVEL; });
+    renderCriteria();
     activeSemt = ""; activeTur = ""; searchTerm = ""; onlyOpen = false;
     $("semtSelect").value = ""; $("turSelect").value = "";
     $("searchInput").value = ""; $("openNow").checked = false;
@@ -332,8 +336,8 @@ function requestLocation() {
   navigator.geolocation.getCurrentPosition(
     pos => {
       userLoc = { lat: pos.coords.latitude, lon: pos.coords.longitude };
-      if (weights.yakinlik === 0) weights.yakinlik = 3;
-      renderSliders();
+      if (weights.yakinlik === 0) weights.yakinlik = DEFAULT_LEVEL;
+      renderCriteria();
       status.textContent = "Konum alındı — yakınlık kriteri etkin. ✓";
       resetPageAndUpdate();
     },
@@ -416,6 +420,25 @@ function isOpenNow(hours, now = new Date()) {
 }
 
 /* ---------- Puanlama ---------- */
+
+/* "Olmazsa olmaz" işaretli her kriteri sağlamayan mekan elenir */
+function passesMust(cafe) {
+  const agg = aggregate(cafe.id);
+  for (const c of CRITERIA) {
+    if (weights[c.key] !== MUST) continue;
+    if (c.needsLocation) {
+      if (userLoc && distKm(userLoc, cafe) > MUST_DIST_KM) return false;
+    } else if (c.key === "puan") {
+      if (agg.genel === null || agg.genel < MUST_STARS) return false;
+    } else if (VOTE_FIELDS.includes(c.key)) {
+      if (agg[c.key] !== "yes") return false;
+    } else {
+      if (cafe.ozellik[c.key] !== "yes") return false;
+    }
+  }
+  return true;
+}
+
 function scoreCafe(cafe) {
   const active = CRITERIA.filter(c => !(c.needsLocation && !userLoc));
   let totalW = active.reduce((s, c) => s + weights[c.key], 0);
@@ -460,6 +483,7 @@ function update() {
   if (activeTur) list = list.filter(c => (c.mutfak || []).includes(activeTur));
   if (searchTerm) list = list.filter(c => c.ad.toLocaleLowerCase("tr").includes(searchTerm));
   if (onlyOpen) list = list.filter(c => isOpenNow(c.saat, now) === true);
+  if (CRITERIA.some(c => weights[c.key] === MUST)) list = list.filter(passesMust);
 
   const scored = list
     .map(c => ({ ...c, match: scoreCafe(c) }))
