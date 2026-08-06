@@ -29,6 +29,7 @@ const VOTE_KEY = "km_oylar";
 
 let DATA = { meta: {}, cafes: [] };
 let seedVotes = {};         // data/puanlar.json → sahibin doğruladığı oylar
+let seedMeta = {};          // puanlar.json meta bilgisi (ör. demo işareti)
 let myVotes = {};           // ziyaretçinin kendi oyları (localStorage)
 let openRatingId = null;    // puanlama formu açık olan mekan
 let draft = {};             // formda henüz kaydedilmemiş oy
@@ -70,6 +71,7 @@ async function loadData() {
   if (window.__CAFE_DATA__) {          // tek dosyalık sürüm (scripts/build_single.py)
     DATA = window.__CAFE_DATA__;
     seedVotes = (window.__PUAN_DATA__ || {}).oylar || {};
+    seedMeta = (window.__PUAN_DATA__ || {}).meta || {};
     init();
     return;
   }
@@ -79,7 +81,11 @@ async function loadData() {
     DATA = await res.json();
     try {
       const pr = await fetch("data/puanlar.json");
-      if (pr.ok) seedVotes = (await pr.json()).oylar || {};
+      if (pr.ok) {
+        const pj = await pr.json();
+        seedVotes = pj.oylar || {};
+        seedMeta = pj.meta || {};
+      }
     } catch { /* tohum oy dosyası yoksa sorun değil */ }
     init();
   } catch (err) {
@@ -97,6 +103,7 @@ function init() {
   renderSelects();
   renderHeroStats();
   bindEvents();
+  $("demoBadge").hidden = !seedMeta.demo;
   update();
 }
 

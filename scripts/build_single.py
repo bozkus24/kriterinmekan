@@ -11,7 +11,6 @@ Varsayılan çıktı: dist/kriterinmekan-single.html
 """
 
 import json
-import re
 import sys
 from pathlib import Path
 
@@ -32,23 +31,27 @@ def build(full: bool) -> str:
     data_js = json.dumps(data, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
     puan_js = json.dumps(puanlar, ensure_ascii=False, separators=(",", ":")).replace("</", "<\\/")
 
-    core = (
-        "<title>Kriterin Mekan — Kriterine Göre Kafe Bul</title>\n"
-        f"<style>\n{css}\n</style>\n"
-        f"{body}\n"
+    scripts = (
         f"<script>window.__CAFE_DATA__ = {data_js};\nwindow.__PUAN_DATA__ = {puan_js};</script>\n"
         f"<script>\n{js}\n</script>\n"
     )
 
     if not full:
-        return core
+        # Artifact yayını: head/body iskeletini yayınlayıcı ekler
+        return (
+            "<title>Kriterin Mekan — Kriterine Göre Kafe Bul</title>\n"
+            f"<style>\n{css}\n</style>\n"
+            f"{body}\n{scripts}"
+        )
 
-    head_extra = re.search(r'<meta name="viewport"[^>]*>|', html).group(0)
-    favicon = re.search(r'<link rel="icon"[^>]*>', html)
+    # Tam belge: index.html'in head'i olduğu gibi taşınır (regex ile etiket
+    # ayıklamak data-URI'lerdeki '>' yüzünden kırılgandı), stil satır içine alınır
+    head = html.split("<head>", 1)[1].split("</head>", 1)[0]
+    head = head.replace('<link rel="stylesheet" href="css/style.css">',
+                        f"<style>\n{css}\n</style>")
     return (
-        '<!DOCTYPE html>\n<html lang="tr">\n<head>\n<meta charset="UTF-8">\n'
-        f"{head_extra}\n{favicon.group(0) if favicon else ''}\n</head>\n<body>\n"
-        f"{core}\n</body>\n</html>\n"
+        '<!DOCTYPE html>\n<html lang="tr">\n<head>'
+        f"{head}</head>\n<body>\n{body}\n{scripts}</body>\n</html>\n"
     )
 
 

@@ -66,6 +66,16 @@ Ziyaretçi her kartta "☆ Puanla" ile oy verir:
   için ileride küçük bir backend — ör. Supabase — bağlanabilir; motor buna
   hazırdır.)
 
+### Örnek (demo) puanlar
+
+Site yayına girmeden arayüzün dolu görünmesi için gerçekçi örnek oylar
+üretilebilir; bu durumda arayüz **"★ puanlar örnek veridir"** rozeti gösterir:
+
+```bash
+python3 scripts/gen_demo_votes.py            # 647 mekana ~2.300 örnek oy
+python3 scripts/gen_demo_votes.py --temizle  # lansman: tümünü sil
+```
+
 ## Dosya Yapısı
 
 ```
