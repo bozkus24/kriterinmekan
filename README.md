@@ -1,8 +1,9 @@
 # Kriterin Mekan ☕
 
-**Kriterine göre kafe bulma sitesi** — ziyaretçi kendi kriterlerinin (wifi, dış mekân, paket servis, erişilebilirlik, sigara alanı, yakınlık) önemini ayarlar; site İstanbul'daki **2.932 gerçek kafeyi** bu ağırlıklara göre puanlayıp %eşleşme skoruyla sıralar.
+**Kriterine göre kafe bulma sitesi** — ziyaretçi kendi kriterlerinin (wifi, dış mekân, paket servis, erişilebilirlik, sigara alanı, yakınlık) önemini ayarlar; site İstanbul'un 39 ilçesindeki **15.217 gerçek kafeyi** bu ağırlıklara göre puanlayıp %eşleşme skoruyla sıralar.
 
-Veriler OpenStreetMap'ten alınmıştır (© OpenStreetMap katkıcıları).
+Veri kaynakları: OpenStreetMap (© OSM katkıcıları, ODbL) + Overture Maps
+Foundation (CDLA-Permissive-2.0 / ODbL).
 
 ## Çalıştırma
 
@@ -24,11 +25,21 @@ python3 scripts/build_single.py dist/kriterinmekan-single.html --full
 ## Veri Hattı
 
 ```
-data/source/export.geojson   (OSM ham verisi, 3.099 nokta)
+data/source/export.geojson              (OSM ham verisi, 3.099 nokta)
         │  python3 scripts/convert.py
         ▼
-data/cafes.json              (2.932 isimli kafe, normalize edilmiş)
+data/cafes.json                         (2.932 isimli OSM kafesi)
+        │  python3 scripts/merge_overture.py   ← pip install pyarrow
+        │  + data/source/overture_istanbul.parquet (Overture İstanbul kesiti)
+        ▼
+data/cafes.json                         (15.217 mekan, birleşik)
 ```
+
+Overture birleştiricisi: güven skoru ≥ 0.5 kayıtları alır, kendi içindeki ve
+OSM'deki mükerrerleri (normalize ad + ≤200 m) teker indirir, eşleşen OSM
+kayıtlarına eksik telefon/web ekler (+707 tel, +406 web), yenilerin ilçesini
+adresten (11.005) veya kNN ile (1.280, `*` imli) atar. Overture kesitini
+tazelemek için `scripts/merge_overture.py` başındaki açıklamaya bakın.
 
 Dönüştürücünün yaptıkları:
 
