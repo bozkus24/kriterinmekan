@@ -62,9 +62,33 @@ Ziyaretçi her kartta "☆ Puanla" ile oy verir:
 - Oy, ziyaretçinin tarayıcısında (`localStorage`) saklanır ve kendi
   sıralamasına anında yansır.
 - `data/puanlar.json` sahibin doğruladığı **kalıcı** oyları tutar; buraya
-  eklenen oylar herkese gösterilir ve ortalamaya katılır. (Ortak oy havuzu
-  için ileride küçük bir backend — ör. Supabase — bağlanabilir; motor buna
-  hazırdır.)
+  eklenen oylar herkese gösterilir ve ortalamaya katılır.
+- **Ortak oy havuzu** (isteğe bağlı): Firebase yapılandırılırsa oylar tüm
+  ziyaretçilerde toplanır — aşağıya bakın.
+
+### Ortak oy havuzu: Firebase kurulumu (~10 dk)
+
+Oyların tüm ziyaretçilerde ortak toplanması için ücretsiz bir Firebase
+projesi yeterlidir (SDK yüklenmez; site Firestore REST API ile konuşur):
+
+1. [console.firebase.google.com](https://console.firebase.google.com) →
+   **Add project** (Analytics gereksiz, kapatabilirsiniz).
+2. Sol menü **Build → Firestore Database → Create database** →
+   *Start in production mode* → bölge seçin (ör. `europe-west1`).
+3. Firestore'un **Rules** sekmesine bu depodaki `firestore.rules`
+   dosyasının içeriğini yapıştırıp **Publish** deyin.
+4. **Project settings (⚙) → Your apps → Web (`</>`)** ile bir web
+   uygulaması ekleyin; çıkan config'ten yalnızca `projectId` ve `apiKey`
+   değerlerini `js/firebase-config.js` içine yazın.
+5. Yayınlayın. Artık "☆ Puanla" oyları `oylar` koleksiyonunda toplanır,
+   sayfa açılışında çekilir ve herkesin ortalamasına katılır. Ziyaretçi
+   oyunu değiştirirse aynı belge güncellenir (mükerrer oy oluşmaz).
+
+Notlar: `apiKey` gizli değildir (istemci kimliği; erişimi `firestore.rules`
+sınırlar). v1 anonim oy modelidir — kötüye kullanım görülürse bir sonraki
+adım Firebase Anonymous Authentication eklemektir. Claude Artifact
+önizlemesinde dış ağ engellendiği için havuz yalnızca gerçek hostingde
+çalışır.
 
 ### Örnek (demo) puanlar
 

@@ -47,9 +47,86 @@ function persistVotes() {
   try { localStorage.setItem(VOTE_KEY, JSON.stringify(myVotes)); } catch { /* gizli mod vb. */ }
 }
 
-/* Bir mekanın tüm oylarını (tohum + ziyaretçinin kendi oyu) özetler */
+/* ---------- Ortak oy havuzu (Firestore REST, js/firebase-config.js) ---------- */
+const FB = (typeof window !== "undefined" && window.FIREBASE_CONFIG) || null;
+let cloudVotes = {};        // mekanId → diğer ziyaretçilerin oyları
+
+// Bu tarayıcıyı temsil eden rastgele kimlik: kendi bulut oyumuzu
+// (yereldeki kopyası zaten sayıldığı için) ortalamaya iki kez katmamak için
+let clientId = "";
+try {
+  clientId = localStorage.getItem("km_cid") ||
+    (localStorage.setItem("km_cid", "c" + Math.random().toString(36).slice(2, 12)),
+     localStorage.getItem("km_cid"));
+} catch { clientId = "c-gecici"; }
+
+const fbBase = () =>
+  `https://firestore.googleapis.com/v1/projects/${FB.projectId}/databases/(default)/documents`;
+
+function fbEncode(id, vote) {
+  const fields = { mekan: { stringValue: id }, cid: { stringValue: clientId } };
+  if (Number.isFinite(vote.genel)) fields.genel = { integerValue: String(vote.genel) };
+  for (const f of VOTE_FIELDS) if (vote[f]) fields[f] = { stringValue: vote[f] };
+  if (vote.t) fields.t = { integerValue: String(vote.t) };
+  return { fields };
+}
+
+function fbDecode(doc) {
+  const f = doc.fields || {};
+  const vote = { cid: f.cid?.stringValue || "" };
+  if (f.genel?.integerValue !== undefined) vote.genel = Number(f.genel.integerValue);
+  for (const k of VOTE_FIELDS) if (f[k]?.stringValue) vote[k] = f[k].stringValue;
+  return { mekan: f.mekan?.stringValue, vote };
+}
+
+async function loadCloudVotes() {
+  if (!FB) return;
+  try {
+    const grouped = {};
+    let pageToken = "", pages = 0;
+    do {
+      const url = `${fbBase()}/oylar?pageSize=300&key=${FB.apiKey}` +
+        (pageToken ? `&pageToken=${pageToken}` : "");
+      const res = await fetch(url);
+      if (!res.ok) throw new Error(`Firestore ${res.status}`);
+      const json = await res.json();
+      for (const doc of json.documents || []) {
+        const { mekan, vote } = fbDecode(doc);
+        if (!mekan || vote.cid === clientId) continue;
+        (grouped[mekan] = grouped[mekan] || []).push(vote);
+      }
+      pageToken = json.nextPageToken || "";
+    } while (pageToken && ++pages < 40);
+    cloudVotes = grouped;
+    update();
+  } catch (err) {
+    console.warn("Ortak oy havuzuna ulaşılamadı (site yerel oylarla çalışmaya devam ediyor):", err.message);
+  }
+}
+
+async function pushVoteCloud(id, vote) {
+  if (!FB) return;
+  try {
+    // Daha önce gönderdiysek aynı belgeyi güncelle, yoksa yeni oluştur
+    const url = vote._doc
+      ? `https://firestore.googleapis.com/v1/${vote._doc}?key=${FB.apiKey}`
+      : `${fbBase()}/oylar?key=${FB.apiKey}`;
+    const res = await fetch(url, {
+      method: vote._doc ? "PATCH" : "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(fbEncode(id, vote)),
+    });
+    if (!res.ok) throw new Error(`Firestore ${res.status}`);
+    const doc = await res.json();
+    if (doc.name && myVotes[id]) { myVotes[id]._doc = doc.name; persistVotes(); }
+  } catch (err) {
+    console.warn("Oy ortak havuza gönderilemedi (yerelde saklandı):", err.message);
+  }
+}
+
+/* Bir mekanın tüm oylarını (tohum + ortak havuz + ziyaretçinin kendi oyu) özetler */
 function aggregate(id) {
-  const votes = [...(seedVotes[id] || [])];
+  const votes = [...(seedVotes[id] || []), ...(cloudVotes[id] || [])];
   if (myVotes[id]) votes.push(myVotes[id]);
   const agg = { n: votes.length, genel: null, priz: null, sessiz: null, calisma: null };
   const stars = votes.map(v => v.genel).filter(Number.isFinite);
@@ -105,6 +182,7 @@ function init() {
   bindEvents();
   $("demoBadge").hidden = !seedMeta.demo;
   update();
+  loadCloudVotes();   // yapılandırılmışsa ortak havuzu arka planda getir
 }
 
 function renderSliders() {
@@ -226,6 +304,7 @@ function bindEvents() {
       if (!hasContent) return;
       myVotes[id] = { ...draft, t: Date.now() };
       persistVotes();
+      pushVoteCloud(id, myVotes[id]);
       openRatingId = null;
       update();
     } else if (act === "cancel") {
@@ -495,7 +574,9 @@ function rateBoxHTML(id) {
       <button type="button" class="btn btn-ghost btn-small" data-act="cancel">Vazgeç</button>
       ${myVotes[id] ? `<button type="button" class="link-btn" data-act="delete" data-id="${esc(id)}">Oyumu sil</button>` : ""}
     </div>
-    <p class="rate-note">Oyun bu tarayıcıda saklanır ve senin sıralamana hemen yansır.</p>
+    <p class="rate-note">${FB
+      ? "Oyun sıralamana hemen yansır ve herkesin gördüğü ortak havuza eklenir."
+      : "Oyun bu tarayıcıda saklanır ve senin sıralamana hemen yansır."}</p>
   </div>`;
 }
 

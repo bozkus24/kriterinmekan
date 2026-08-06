@@ -20,11 +20,13 @@ ROOT = Path(__file__).resolve().parent.parent
 def build(full: bool) -> str:
     css = (ROOT / "css" / "style.css").read_text(encoding="utf-8")
     js = (ROOT / "js" / "app.js").read_text(encoding="utf-8")
+    fb_js = (ROOT / "js" / "firebase-config.js").read_text(encoding="utf-8")
     html = (ROOT / "index.html").read_text(encoding="utf-8")
     data = json.loads((ROOT / "data" / "cafes.json").read_text(encoding="utf-8"))
     puanlar = json.loads((ROOT / "data" / "puanlar.json").read_text(encoding="utf-8"))
 
     body = html.split("<body>", 1)[1].rsplit("</body>", 1)[0]
+    body = body.replace('<script src="js/firebase-config.js"></script>', "")
     body = body.replace('<script src="js/app.js"></script>', "").strip()
 
     # "</script>" dizisinin script bloğunu erken kapatmaması için kaçır
@@ -33,6 +35,7 @@ def build(full: bool) -> str:
 
     scripts = (
         f"<script>window.__CAFE_DATA__ = {data_js};\nwindow.__PUAN_DATA__ = {puan_js};</script>\n"
+        f"<script>\n{fb_js}\n</script>\n"
         f"<script>\n{js}\n</script>\n"
     )
 
